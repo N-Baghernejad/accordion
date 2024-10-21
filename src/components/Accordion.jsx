@@ -19,26 +19,54 @@ const data= [
 ]
 function Accordion() {
   const[open, setOpen] = useState(null);
+  const handleOpen= (id) => {
+    setOpen(id===open? null:id );
+  };
   return (
     <div className='accordion'>
         {
           data.map(item => (
-           <AccordionItem key={item.id} item={item} setOpen={setOpen} open={open}/>
+           <AccordionItem 
+           key={item.id} 
+           id={item.id}
+           title={item.title}
+           onOpen={handleOpen}  
+           open={open}>
+              {item.text}
+           </AccordionItem>
           ))
         }
+
+            <AccordionItem 
+            id={4}
+            title="another accordion"
+            onOpen={handleOpen}  
+            open={open}>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe assumenda exercitationem est ex illum. Commodi at incidunt mollitia labore sit optio modi delectus perferendis, error exercitationem veritatis sequi eum voluptate!
+              </p>
+              <ul>
+                <li>one</li>
+                <li>two</li>
+              </ul>
+              <a href="#">Hi</a>
+            </AccordionItem>
     </div>
   )
 }
 
 export default Accordion;
 
-function AccordionItem({item, setOpen, open}){
+function AccordionItem({id,title, open, onOpen,children}){
   // const [isOpen,setIsOpen]= useState(false);
-  const isOpen = item.id === open;
+  const isOpen = id === open;
   return(
     <div className= {`accordion-item ${isOpen ? "accordion__expanded": ""}`} >
-      <div className='accordion-item__header' onClick={() => setOpen(item.id)}>
-        <div>{item.title}</div>
+      <div className='accordion-item__header' 
+      // onClick={() => setOpen(item.id)}
+      onClick={() => onOpen(id)}
+      >
+        <div>{title}</div>
         <ChevronDownIcon className="accordion-item__chevron"
         // style={{
         //   width:"1.2rem", 
@@ -47,7 +75,7 @@ function AccordionItem({item, setOpen, open}){
         //   }}
            />
       </div>
-      <div className='accordion-item__content'>{item.text}</div>
+      <div className='accordion-item__content'>{children}</div>
       {/* {isOpen && <div className='accordion-item__content'>{item.text}} */}
     </div>
   )
